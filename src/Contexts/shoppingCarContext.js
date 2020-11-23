@@ -1,28 +1,50 @@
 import React, { useState, createContext } from 'react';
 
-export const carContext = createContext();
-export const amountContext = createContext();
+export const CarContext = createContext();
 
 export const CarProvider = props => {
   const [items, setItems] = useState([
-    { name: "Vava T-Shirt", price: 630, id: 1 },
-    { name: "Vava TT-Shirt", price: 600, id: 2 },
-    { name: "Vava TT-Shirt", price: 400, id: 3 },
-    { name: "Vava TT-Shirt", price: 500, id: 4 },
-    { name: "Vava TT-Shirt", price: 450, id: 5 }
+    { name: "Vava A-Shirt", price: 630, id: 1, amount:0 },
+    { name: "Vava B-Shirt", price: 600, id: 2, amount:0 },
+    { name: "Vava C-Shirt", price: 400, id: 3, amount:0 },
+    { name: "Vava D-Shirt", price: 500, id: 4, amount:0 },
+    { name: "Vava E-Shirt", price: 450, id: 5, amount:0 }
   ]);
+
+  const [seletedItems, setSeletedItems] = useState(items);
+
+  const seletedAddItem = (id, amount) => {
+    setSeletedItems(items.map((item) =>{
+      if(item.id === id) {
+        item.amount = amount+1
+      }
+      return item;
+    }));    
+  }
+
+  const seletedMinusItem = (id, amount) => {
+    setSeletedItems(items.map((item) =>{
+      if(item.id === id) {
+        item.amount = amount-1
+      }
+      return item;
+    }));    
+  }
+
+  const removeItem = id => {
+    setItems(items.filter(item => item.id !== id));
+  };
+
   return(
-    <carContext.Provider value={[items, setItems]}>
+    <CarContext.Provider value={{
+      items, 
+      removeItem, 
+      seletedItems,
+      seletedAddItem,
+      seletedMinusItem
+    }}>
       {props.children}
-    </carContext.Provider>
+    </CarContext.Provider>
   )
 }
 
-export const AmountProvider = props => {
-  const [totalAmount, setTotalAmount] = useState(0);
-  return(
-    <amountContext.Provider value={[totalAmount, setTotalAmount]}>
-      {props.children}
-    </amountContext.Provider>
-  )
-}

@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
+import { CarContext } from '../Contexts/shoppingCarContext.js';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import QuantityButton from './quantityButton.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,14 +17,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ShoppingCarItem({name, price}) {
+export default function ShoppingCarItem({name, price, id}) {
   const classes = useStyles();
-  const [age, setAge] = useState('');
+  const { removeItem } = useContext(CarContext);
   
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
-
   return (
     <div className={classes.section}>
       <Grid container alignItems="center">
@@ -42,25 +35,10 @@ export default function ShoppingCarItem({name, price}) {
           <Typography gutterBottom variant="h4">
             {name}
           </Typography>
-        </Grid>
-        <Grid item xs>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-label">Age</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={age}
-              onChange={handleChange}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
+        </Grid>        
         <Grid item xs>
           <Grid container alignItems="center">
-            <QuantityButton price={price}/>
+            <QuantityButton id={id}/>
           </Grid>
         </Grid>
         <Grid item xs>
@@ -69,8 +47,11 @@ export default function ShoppingCarItem({name, price}) {
           </Typography>
         </Grid>
         <Grid item xs>
-          <IconButton aria-label="delete">
-            <DeleteIcon fontSize="large" />
+          <IconButton 
+            aria-label="delete"            
+            onClick={() => removeItem(id)}
+          >
+            <DeleteIcon fontSize="large"/>
           </IconButton>
         </Grid>
       </Grid>

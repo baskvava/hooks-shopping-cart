@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
-import { amountContext } from '../Contexts/shoppingCarContext.js';
+import React, { useState, useContext } from 'react';
+import { CarContext } from '../Contexts/shoppingCarContext.js';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -7,27 +7,21 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 
 
-export default function ShoppingCarItem({price}) {
+export default function ShoppingCarItem({id}) {
   const [count, setCount] = useState(0);
-  const [totalAmount, setTotalAmount] = useContext(amountContext);
+  const {seletedAddItem, seletedMinusItem} = useContext(CarContext);
 
+  const handleAddOnClick = () => {    
+    setCount(count+1);
+    seletedAddItem(id, count);    
+  }  
 
-  let usePrevious = value => {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = value;
-    });
-    return ref.current;
-  };
-
-  const prevCount = usePrevious(count);
-
-  useEffect(() => {
-    if(count !==0 || prevCount>0 & count===0) {
-        (prevCount < count)? setTotalAmount(totalAmount+price): setTotalAmount(totalAmount-price);
-    }
-  },[count]);
-
+  const handleMinusOnClick = () => {
+    setCount(count-1);
+    seletedMinusItem(id, count);    
+  }  
+  
+  
   return (
     <Grid item xs>
       <Grid container alignItems="center">
@@ -36,7 +30,7 @@ export default function ShoppingCarItem({price}) {
             color="primary"
             aria-label="upload picture"
             component="span"
-            onClick={ () => setCount(count+1) }
+            onClick={handleAddOnClick}
           >
             <AddIcon />
           </IconButton>
@@ -51,7 +45,7 @@ export default function ShoppingCarItem({price}) {
             color="primary"
             aria-label="upload picture"
             component="span"
-            onClick={ () => setCount(count-1) }
+            onClick={handleMinusOnClick}
           >
             <RemoveIcon />
           </IconButton>

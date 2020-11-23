@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { carContext } from '../Contexts/shoppingCarContext.js';
+import { CarContext } from '../Contexts/shoppingCarContext.js';
 import Grid from '@material-ui/core/Grid';
 import ShoppingCarItem from './shoppingCarItem.js';
 
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ShoppingCar() {
   const classes = useStyles();
-  const [items] = useContext(carContext);
+  const {items} = useContext(CarContext);
 
   return (
     <div className={classes.root}>
@@ -25,6 +25,7 @@ export default function ShoppingCar() {
           {items.map((item) =>
             <ShoppingCarItem
               key={item.id}
+              id={item.id}
               name={item.name}
               price={item.price} />
           )}

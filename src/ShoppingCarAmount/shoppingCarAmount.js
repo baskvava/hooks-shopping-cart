@@ -1,9 +1,18 @@
 import React, { useContext } from 'react';
+import { CarContext } from '../Contexts/shoppingCarContext.js';
 import Typography from '@material-ui/core/Typography';
-import { amountContext } from '../Contexts/shoppingCarContext.js';
 
 export default function ShoppingCarAmount() {
-  const [totalAmount] = useContext(amountContext);
+  const { seletedItems } = useContext(CarContext);
+  console.log(seletedItems);
+
+  const itemsPrice = seletedItems.map(
+    (seletedItem) => seletedItem.price*seletedItem.amount
+  );
+
+  const totalAmount = itemsPrice.reduce((pre, cur) => (pre += cur),0)
+
+  // console.log(totalAmount);
 
   return (
     <div>
